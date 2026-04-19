@@ -1,12 +1,12 @@
 {
-  "model": "logreg",
+  "model": "rf",
   "csv_path": "data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv",
   "target_column": "Churn",
-  "accuracy": 0.7963,
-  "f1": 0.5882,
-  "roc_auc": 0.8403,
-  "train_rows": 5634,
-  "test_rows": 1409,
+  "accuracy": 0.7913,
+  "f1": 0.544,
+  "roc_auc": 0.826,
+  "train_rows": 4930,
+  "test_rows": 2113,
   "features": [
     "customerID",
     "gender",

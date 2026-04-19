@@ -6,59 +6,24 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from src.data import load_data
+from src.features import build_preprocessor
+from src.models import get_model
 
 RANDOM_STATE = 42
-ARTIFACT_DIR = Path("artifacts")
-MODEL_PATH = ARTIFACT_DIR / "model.joblib"
-METRICS_PATH = ARTIFACT_DIR / "metrics.json"
-TEST_DATA_PATH = ARTIFACT_DIR / "test_sample.csv"
+ARTIFACT_DIR = "artifacts"
 
-def get_model(model_name: str):
-    """Select Basic model including Logistic Regression and Random Forest Classification."""
-    if model_name == "logreg":
-        return LogisticRegression(max_iter=2000, random_state=RANDOM_STATE)
-    
-    if model_name == "rf":
-        return RandomForestClassifier(n_estimators=200, random_state=RANDOM_STATE)
-    return ValueError(f"Unsupported model: {model_name}")
 
-def build_pipeline(X, model_name: str = "logreg") -> Pipeline:
+
+def build_pipeline(X, random_state: int, model_name: str = "logreg") -> Pipeline:
     """Build pipeline including numeric and categorical columns transformer and selected model."""
-    numeric_features = X.select_dtypes(include=["number"]).columns.tolist()
-    categorical_features = X.select_dtypes(exclude=["number"]).columns.tolist()
-
-    numeric_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy='median')),
-            ("scaler", StandardScaler()),
-
-    ])
-
-    categorical_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("onehot", OneHotEncoder(handle_unknown="ignore"))
-        ]
-    )
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, categorical_features)    
-        ]
-    )
-
-    model = get_model(model_name)
+    
+    preprocessor = build_preprocessor(X)
+    model = get_model(model_name, random_state)
 
     return Pipeline(
         steps=[
@@ -71,9 +36,18 @@ def train(
         csv_path: str = "data/dataset.csv",
         target_column: str = "label",
         model_name: str = "logreg",
+        test_size: float = 0.2,
+        random_state: int = RANDOM_STATE,
+        output_dir: str = ARTIFACT_DIR
 ) -> dict:
     """Train the model."""
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+    artifact_dir = Path(output_dir)
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+
+    model_path = artifact_dir / "model.joblib"
+    metrics_path = artifact_dir / "metrics.json"
+    test_sample_path = artifact_dir / "test_sample.csv"
+
     df = load_data(csv_path=csv_path, target_column=target_column)
     X = df.drop(columns=['label'])
     y = df['label']
@@ -81,12 +55,12 @@ def train(
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
-        test_size=0.2,
-        random_state=RANDOM_STATE,
+        test_size=test_size,
+        random_state=random_state,
         stratify=y
     )
 
-    pipeline = build_pipeline(X, model_name=model_name)
+    pipeline = build_pipeline(X, random_state, model_name=model_name)
     pipeline.fit(X_train, y_train)
 
     preds = pipeline.predict(X_test)
@@ -104,12 +78,12 @@ def train(
         "features": X.columns.tolist(),
     }
 
-    joblib.dump(pipeline, MODEL_PATH)
-    METRICS_PATH.write_text(json.dumps(metrics, indent=2), encoding='utf-8')
+    joblib.dump(pipeline, model_path)
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding='utf-8')
 
     sample = X_test.head(5).copy()
     sample['label'] = y_test.head(5).copy()
-    sample.to_csv(TEST_DATA_PATH, index=False)
+    sample.to_csv(test_sample_path, index=False)
 
     return metrics
 
@@ -137,6 +111,28 @@ def parse_args():
         help='Model to train'
     )
 
+    parser.add_argument(
+        "--test-size",
+        type=float,
+        default=0.2,
+        help='Test split size'
+    )
+
+    parser.add_argument(
+        "--random-state",
+        type=float,
+        default=RANDOM_STATE,
+        help='random state'
+    )
+
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=ARTIFACT_DIR,
+        help='output directory'
+    )
+
+
     return parser.parse_args()
 
 if __name__ == '__main__':
@@ -145,6 +141,9 @@ if __name__ == '__main__':
         csv_path=args.csv_path,
         target_column=args.target_column,
         model_name=args.model_name,
+        test_size=args.test_size,
+        random_state=args.random_state,
+        output_dir=args.output_dir
     )
 
     print(json.dumps(result, indent=2))
