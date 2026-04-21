@@ -189,5 +189,6 @@ if __name__ == '__main__':
         random_state=args.random_state,
         artifact=args.artifact
     )
+    
 
     print(json.dumps(result, indent=2))
