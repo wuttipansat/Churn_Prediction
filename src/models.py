@@ -1,11 +1,15 @@
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 
-def get_model(model_name: str, random_state: int):
-    """Select Basic model including Logistic Regression and Random Forest Classification."""
-    if model_name == "logreg":
-        return LogisticRegression(max_iter=2000, random_state=random_state)
+def get_models(random_state: int):
+    """Return multiple models for benchmarking"""
+    return {
+        "logreg": LogisticRegression(max_iter=2000, random_state=random_state),
+        "rf": RandomForestClassifier(n_estimators=200, random_state=random_state),
+        "dt": DecisionTreeClassifier(random_state=random_state),
+        "gb": GradientBoostingClassifier(random_state=random_state),
+        "svm": SVC(probability=True, random_state=random_state)
+    }
     
-    if model_name == "rf":
-        return RandomForestClassifier(n_estimators=200, random_state=random_state)
-    return ValueError(f"Unsupported model: {model_name}")

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
 def load_data(
         csv_path: str | Path = "data/dataset.csv",
@@ -26,4 +27,18 @@ def load_data(
     if target_column != "label":
         df = df.rename(columns={target_column: "label"})
 
+    return clean_data(df)
+
+def clean_data(df) -> pd.DataFrame:
+    
+    if 'TotalCharges' in df.columns:
+        df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
+        df['TotalCharges'] = df['TotalCharges'].fillna(0)
+
+    if "customerID" in df.columns:
+        df = df.drop(columns=["customerID"], errors="ignore")
+
+    df.drop_duplicates()
+
     return df
+

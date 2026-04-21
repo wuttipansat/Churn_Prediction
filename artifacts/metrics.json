@@ -1,32 +1,43 @@
 {
-  "model": "rf",
-  "csv_path": "data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv",
+  "csv_path": "./data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv",
+  "random_state": 30,
   "target_column": "Churn",
-  "accuracy": 0.7913,
-  "f1": 0.544,
-  "roc_auc": 0.826,
-  "train_rows": 4930,
-  "test_rows": 2113,
-  "features": [
-    "customerID",
-    "gender",
-    "SeniorCitizen",
-    "Partner",
-    "Dependents",
-    "tenure",
-    "PhoneService",
-    "MultipleLines",
-    "InternetService",
-    "OnlineSecurity",
-    "OnlineBackup",
-    "DeviceProtection",
-    "TechSupport",
-    "StreamingTV",
-    "StreamingMovies",
-    "Contract",
-    "PaperlessBilling",
-    "PaymentMethod",
-    "MonthlyCharges",
-    "TotalCharges"
-  ]
+  "results": [
+    {
+      "model": "logreg",
+      "accuracy": 0.807,
+      "f1": 0.5924,
+      "roc_auc": 0.8482,
+      "roc_auc_std": 0.0138
+    },
+    {
+      "model": "gb",
+      "accuracy": 0.8011,
+      "f1": 0.5804,
+      "roc_auc": 0.8457,
+      "roc_auc_std": 0.0139
+    },
+    {
+      "model": "rf",
+      "accuracy": 0.7855,
+      "f1": 0.5465,
+      "roc_auc": 0.823,
+      "roc_auc_std": 0.0098
+    },
+    {
+      "model": "svm",
+      "accuracy": 0.799,
+      "f1": 0.5571,
+      "roc_auc": 0.7973,
+      "roc_auc_std": 0.0141
+    },
+    {
+      "model": "dt",
+      "accuracy": 0.7267,
+      "f1": 0.4979,
+      "roc_auc": 0.6591,
+      "roc_auc_std": 0.012
+    }
+  ],
+  "n_rows": 7043
 }
