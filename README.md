@@ -42,7 +42,6 @@ and in `outputs/`:
 
 * Target column will be renamed to `label`
 * Supports numeric and categorical features
-* Models: `logreg`, `rf`
 
 ## Future Improvement
 
