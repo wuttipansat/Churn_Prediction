@@ -29,7 +29,6 @@ DATA_FILE = "./data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv"
 def train(
         csv_path: str = "data/dataset.csv",
         target_column: str = "label",
-        test_size: float = 0.2,
         random_state: int = RANDOM_STATE,
         artifact: str = ARTIFACT_DIR,
         output: str = OUTPUT_DIR
@@ -157,13 +156,6 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--test-size",
-        type=float,
-        default=0.2,
-        help='Test split size'
-    )
-
-    parser.add_argument(
         "--random-state",
         type=int,
         default=RANDOM_STATE,
@@ -185,7 +177,6 @@ if __name__ == '__main__':
     result = train(
         csv_path=args.csv_path,
         target_column=args.target_column,
-        test_size=args.test_size,
         random_state=args.random_state,
         artifact=args.artifact
     )
