@@ -4,13 +4,14 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import make_column_selector
 
 import pandas as pd
 
-def build_preprocessor(X):
-    """Transform X data into numeric and categorical features for preprocessing."""
-    numeric_features = X.select_dtypes(include=["number"]).columns.tolist()
-    categorical_features = X.select_dtypes(exclude=["number"]).columns.tolist()
+def build_preprocessor():
+    """Transform data into numeric and categorical features for preprocessing."""
+    # numeric_features = X.select_dtypes(include=["number"]).columns.tolist()
+    # categorical_features = X.select_dtypes(exclude=["number"]).columns.tolist()
 
     numeric_transformer = Pipeline(
         steps=[
@@ -28,15 +29,19 @@ def build_preprocessor(X):
 
     preprocessor = ColumnTransformer(
         transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, categorical_features)    
-        ]
+            ("num", numeric_transformer, make_column_selector(dtype_include='number')),
+            ("cat", categorical_transformer, make_column_selector(dtype_exclude='number'))    
+        ],
+        remainder="drop"
     )
 
     return preprocessor
 
-def add_features(feat) -> pd.DataFrame:
+def add_features(df: pd.DataFrame) -> pd.DataFrame:
     """Add feature engineering."""
+
+    feat = df.copy()
+
     feat['TotalCharges'] = pd.to_numeric(feat['TotalCharges'], errors='coerce')
     feat['tenure'] = pd.to_numeric(feat['tenure'], errors='coerce')
     #average charge per month

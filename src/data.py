@@ -37,7 +37,7 @@ def clean_data(df) -> pd.DataFrame:
     if "customerID" in df.columns:
         df = df.drop(columns=["customerID"], errors="ignore")
 
-    df.drop_duplicates()
+    df = df.drop_duplicates()
 
     return df
 

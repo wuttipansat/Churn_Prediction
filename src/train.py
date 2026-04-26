@@ -11,6 +11,7 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import FunctionTransformer
 
 from data import load_data
 from features import build_preprocessor, add_features
@@ -45,8 +46,6 @@ def train(
 
     df = load_data(csv_path=Path(csv_path), target_column=target_column)
 
-    df = add_features(df)
-
     X = df.drop(columns=['label'])
     y = df['label']
 
@@ -62,7 +61,8 @@ def train(
     for name, model in models.items():
         pipeline = Pipeline(
             steps=[
-                ("preprocessor", build_preprocessor(X)),
+                ("feature_engineering", FunctionTransformer(add_features)),
+                ("preprocessor", build_preprocessor()),
                 ("model", model)
             ]
         )
@@ -94,13 +94,19 @@ def train(
 
     final_pipeline = Pipeline(
         steps=[
-            ('preprocessor', build_preprocessor(X)),
+            ("feature_engineering", FunctionTransformer(add_features)),
+            ('preprocessor', build_preprocessor()),
             ("model", best_model)
         ]
     )
 
     final_pipeline.fit(X, y)
-    y_prob = final_pipeline.predict_proba(X)[:, 1]
+
+    model_step = final_pipeline.named_steps["model"]
+    if hasattr(model_step, "predict_proba"):
+        y_prob = final_pipeline.predict_proba(X)[:, 1]
+    else:
+        y_prob = final_pipeline.decision_function(X)
 
     fpr, tpr, thresholds = roc_curve(y, y_prob)
     roc_auc = auc(fpr, tpr)
@@ -170,7 +176,7 @@ def parse_args():
     parser.add_argument(
         "--target-column",
         type=str,
-        default='label',
+        default='Churn',
         help='Name of target column in CSV'
     )
 

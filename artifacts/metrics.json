@@ -5,39 +5,39 @@
   "results": [
     {
       "model": "logreg",
-      "accuracy": 0.807,
-      "f1": 0.5924,
-      "roc_auc": 0.8482,
-      "roc_auc_std": 0.0138
+      "accuracy": 0.8049,
+      "f1": 0.5833,
+      "roc_auc": 0.8471,
+      "roc_auc_std": 0.0091
     },
     {
       "model": "gb",
-      "accuracy": 0.8011,
-      "f1": 0.5804,
-      "roc_auc": 0.8457,
-      "roc_auc_std": 0.0139
-    },
-    {
-      "model": "rf",
-      "accuracy": 0.7855,
-      "f1": 0.5465,
-      "roc_auc": 0.823,
+      "accuracy": 0.8029,
+      "f1": 0.5838,
+      "roc_auc": 0.8465,
       "roc_auc_std": 0.0098
     },
     {
+      "model": "rf",
+      "accuracy": 0.7921,
+      "f1": 0.5596,
+      "roc_auc": 0.8272,
+      "roc_auc_std": 0.0107
+    },
+    {
       "model": "svm",
-      "accuracy": 0.799,
-      "f1": 0.5571,
-      "roc_auc": 0.7973,
-      "roc_auc_std": 0.0141
+      "accuracy": 0.8009,
+      "f1": 0.5594,
+      "roc_auc": 0.8021,
+      "roc_auc_std": 0.0135
     },
     {
       "model": "dt",
-      "accuracy": 0.7267,
-      "f1": 0.4979,
-      "roc_auc": 0.6591,
-      "roc_auc_std": 0.012
+      "accuracy": 0.729,
+      "f1": 0.4915,
+      "roc_auc": 0.6552,
+      "roc_auc_std": 0.0183
     }
   ],
-  "n_rows": 7043
+  "n_rows": 7021
 }
