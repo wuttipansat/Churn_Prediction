@@ -6,7 +6,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 import pandas as pd
-import numpy as np
 
 def build_preprocessor(X):
     """Transform X data into numeric and categorical features for preprocessing."""

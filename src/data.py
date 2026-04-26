@@ -1,7 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
 
 def load_data(
         csv_path: str | Path = "data/dataset.csv",

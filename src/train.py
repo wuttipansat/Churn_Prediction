@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 
 import joblib
 import pandas as pd
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_curve, auc
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import StratifiedKFold
@@ -101,6 +100,10 @@ def train(
     )
 
     final_pipeline.fit(X, y)
+    y_prob = final_pipeline.predict_proba(X)[:, 1]
+
+    fpr, tpr, thresholds = roc_curve(y, y_prob)
+    roc_auc = auc(fpr, tpr)
 
     joblib.dump(final_pipeline, model_path)
 
@@ -112,7 +115,7 @@ def train(
     "target_column": target_column,
     "results": sorted(results, key=lambda x: x['roc_auc'], reverse=True),
     "n_rows": int(len(X))
-}
+    }
 
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding='utf-8')
 
@@ -134,6 +137,22 @@ def train(
     fig_path = output_dir / "model_comparison.png"
     plt.savefig(fig_path, bbox_inches='tight', dpi=300)
 
+    plt.close()
+
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(fpr, tpr, label=f"AUC = {roc_auc:.3f}", color='blue', linewidth=2.0)
+    plt.plot([0, 1], [0, 1], linestyle="--", color='black', linewidth=2.0)
+
+    plt.xlabel("False Positive Rate", fontsize=16)
+    plt.ylabel("True Positive Rate", fontsize=16)
+    plt.title(f"ROC Curve ({best_model_name})", fontsize=20)
+    plt.xlim(0,1)
+    plt.ylim(0,1)
+    plt.legend(loc="lower right")
+
+    roc_path = output_dir / "roc_curve.png"
+    plt.savefig(roc_path, bbox_inches="tight", dpi=300)
     plt.close()
 
     return metrics
