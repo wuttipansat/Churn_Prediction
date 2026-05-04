@@ -3,6 +3,8 @@
 An end-to-end Machine Learning project predicts whether a customer is likely to churn using the Telcom Customer Churn dataset.
 The project includes data preprocessing, feature engineering, multi-model training and comparison, FastAPI interface with Docker deployment.
 
+![image alt](https://github.com/wuttipansat/Churn_Prediction/blob/28270f23689c5c1c44afef16ff0f5568e44eeea6/outputs/snapshot1.png)
+
 ## Features
 
 * Customer churn prediction with Machine Learning models
