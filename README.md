@@ -45,6 +45,16 @@ python src/train.py --csv-path data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv --t
 
 After training, files will be saved in `artifacts/`:
 
+## Results
+
+### Model Comparison
+
+![image alt](https://github.com/wuttipansat/Churn_Prediction/blob/28270f23689c5c1c44afef16ff0f5568e44eeea6/outputs/model_comparison.png)
+
+### Best Model ROC Curve
+
+![image alt](https://github.com/wuttipansat/Churn_Prediction/blob/28270f23689c5c1c44afef16ff0f5568e44eeea6/outputs/roc_curve.png)
+
 ## Run the API Locally
 
 ```bash
