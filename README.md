@@ -1,19 +1,35 @@
-ML Churn Prediction Pipeline
+# Production-ready Machine Learning API for customer churn prediction
 
-An end-to-end machine learning pipeline for customer churn prediction using scikit-learn, featuring:
+An end-to-end Machine Learning project predicts whether a customer is likely to churn using the Telcom Customer Churn dataset.
+The project includes data preprocessing, feature engineering, multi-model training and comparison, FastAPI interface with Docker deployment.
 
-- Multi-model benchmarking
-- Stratified cross-validation
-- Automatic best model selection
-- Model + metrics + visualization export
+## Features
 
-## Setup
+* Customer churn prediction with Machine Learning models
+* Automated preprocessing and feature engineering
+* Multi-model training and evaluation pipeline
+* Saved model artifact using joblib
+* REST API powered by FastAPI
+* Dockerized deployment workflow
+
+
+## Models
+* Logistic Regression
+* Random Forest Classifier
+* Decision Tree Classifier
+* Gradient Boosting Classifier
+* Support Vector Machine
+* etc. (More model will be added)
+
+## Getting Started
+
+### 1.Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Train
+### 2. Train Models
 
 ```bash
 python src/train.py
@@ -25,25 +41,48 @@ or Specific dataset and target column:
 python src/train.py --csv-path data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv --target-column Churn
 ```
 
-## Output
-
 After training, files will be saved in `artifacts/`:
 
-* model.joblib
-* metrics.json
-* test_sample.csv
+## Run the API Locally
 
-and in `outputs/`:
+```bash
+uvicorn app.app:app --host 0.0.0.0 --port 8000
+```
 
-* model_comparison.png
+Open the API documentation:
 
+```
+http://localhost:8000/docs
+```
 
-## Notes
+## Docker Deployment
 
-* Target column will be renamed to `label`
-* Supports numeric and categorical features
+### Build Docker Image
 
-## Future Improvement
+```bash
+docker build -t churn-prediction-api .
+```
 
-* Hyperparameter tuning
-* Data validation
+### Run API Container
+
+```bash
+docker run --rm -p 8000:8000 churnguard-api
+```
+
+Open API documentation:
+
+```
+http://localhost:8000/docs
+```
+
+## Test the API
+
+Start the API first, then run:
+
+```bash
+python app/test_api.py
+```
+
+## Author
+
+Developed by **Wuttipan Satienpaisan**
