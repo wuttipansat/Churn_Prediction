@@ -1,4 +1,4 @@
-# Production-ready Machine Learning API for customer churn prediction
+# ChurnGuard API
 
 An end-to-end Machine Learning project predicts whether a customer is likely to churn using the Telcom Customer Churn dataset.
 The project includes data preprocessing, feature engineering, multi-model training and comparison, FastAPI interface with Docker deployment.
@@ -72,7 +72,7 @@ http://localhost:8000/docs
 ### Build Docker Image
 
 ```bash
-docker build -t churn-prediction-api .
+docker build -t churn-guard-api .
 ```
 
 ### Run API Container
