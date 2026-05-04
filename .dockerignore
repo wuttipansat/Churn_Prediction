@@ -1,0 +1,13 @@
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.ipynb_checkpoints
+.pytest_cache
+.DS_Store
+
+notebooks/
+outputs/
